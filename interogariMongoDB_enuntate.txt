@@ -1,0 +1,1123 @@
+####################################################################
+
+###  Colecția: lineitem_orders  ### 
+
+# Afișează o comandă completă (inclusiv toate liniile):
+db.lineitem_orders.findOne()
+
+# Numărul total de comenzi:
+db.lineitem_orders.countDocuments()
+
+# Comenzi cu statusul „F” (finalizate)
+db.lineitem_orders.find({ o_orderstatus: "F" })
+
+# Comenzi cu prioritate urgentă:
+db.lineitem_orders.find({ o_orderpriority: "1-URGENT" })
+
+# Comenzi cu valoare totală peste 100.000:
+db.lineitem_orders.find({ o_totalprice: { $gt: 100000 } })
+
+# Comenzi plasate înainte de 1995:
+db.lineitem_orders.find({ o_orderdate: { $lt: "1995-01-01" } })
+
+# Top 5 comenzi după preț total:
+db.lineitem_orders.find().sort({ o_totalprice: -1 }).limit(5)
+
+# Listă doar cu cheia și data pentru fiecare comandă:
+db.lineitem_orders.find({}, { o_orderkey: 1, o_orderdate: 1, _id: 0 })
+
+# Comenzi care conțin linii cu cantitate mai mare de 40
+db.lineitem_orders.find({ "lineitem.l_quantity": { $gt: 40 } })
+
+# Lista tuturor funcționarilor implicați (distinct):
+db.lineitem_orders.distinct("o_clerk")
+
+# Comenzi care includ produse returnate (l_returnflag = "R"):
+db.lineitem_orders.find({ "lineitem.l_returnflag": "R" })
+
+# Liniile de comandă pentru o anumită comandă (o_orderkey = 1):
+db.lineitem_orders.find({ o_orderkey: 1 }, { lineitem: 1 })
+
+# Comenzi cu discount mai mare de 5%:
+db.lineitem_orders.find({ "lineitem.l_discount": { $gt: 0.05 } })
+
+# Primele 10 comenzi din colecție:
+db.lineitem_orders.find().limit(10)
+
+
+##############################################
+
+### Colectia customer ###
+
+# Afișează un client:
+db.customer.findOne()
+
+# nr total de clienti
+db.customer.countDocuments()
+
+
+# clienti din segmentul building
+db.customer.find({ c_mktsegment: "BUILDING" })
+
+
+# Clienți cu sold (c_acctbal) peste 1000:
+db.customer.find({ c_acctbal: { $gt: 1000 } })
+
+
+# Clienți din națiunea cu cheia 5:
+db.customer.find({ c_nationkey: 5 })
+
+
+# Top 5 clienți după sold (descrescător):
+db.customer.find().sort({ c_acctbal: -1 }).limit(5)
+
+
+# Clienți ordonați alfabetic după nume:
+db.customer.find().sort({ c_name: 1 }).limit(10)
+
+
+# Lista doar cu nume și telefon pentru clienții din segmentul „AUTOMOBILE”:
+db.customer.find({ c_mktsegment: "AUTOMOBILE" }, { c_name: 1, c_phone: 1, _id: 0 })
+
+
+# Clienți cu numere de telefon care încep cu „15-”:
+db.customer.find({ c_phone: /^15-/ })
+
+ 
+# Numărul clienților din segmentul „HOUSEHOLD”:
+db.customer.countDocuments({ c_mktsegment: "HOUSEHOLD" })
+
+
+# Valori distincte pentru c_mktsegment:
+db.customer.distinct("c_mktsegment")
+
+
+# Clienți cu sold negativ (debitori):
+db.customer.find({ c_acctbal: { $lt: 0 } })
+
+
+# Primele 10 înregistrări din colecție:
+db.customer.find().limit(10)
+
+
+###########################################################
+
+### Colectia  lineitem ###
+
+# Afișează o linie de comandă:
+db.lineitem.findOne()
+
+# Numărul total de documente în colecție:
+db.lineitem.countDocuments()
+
+# Linii unde discountul este exact 10%:
+db.lineitem.find({ l_discount: 0.10 })
+
+# Linii livrate înainte de 1 ianuarie 1995:
+db.lineitem.find({ l_shipdate: { $lt: "1995-01-01" } })
+
+# Top 5 linii cu cel mai mare preț extins (l_extendedprice):
+db.lineitem.find().sort({ l_extendedprice: -1 }).limit(5)
+
+# Linii de comandă pentru o piesă anume (l_partkey = 1234):
+db.lineitem.find({ l_partkey: 1234 })
+
+# Linii cu taxă (l_tax) mai mare de 0.05:
+db.lineitem.find({ l_tax: { $gt: 0.05 } })
+
+# Linii cu taxă (l_tax) mai mare de 0.05:
+db.lineitem.find({ l_tax: { $gt: 0.05 } })
+
+# Distinct: toate valorile diferite pentru l_linestatus:
+db.lineitem.distinct("l_linestatus")
+
+# Afișează doar l_orderkey, l_partkey și l_quantity:
+db.lineitem.find({}, { l_orderkey: 1, l_partkey: 1, l_quantity: 1, _id: 0 })
+
+# Linii pentru o anumită comandă (l_orderkey = 5):
+db.lineitem.find({ l_orderkey: 5 })
+
+# Primele 10 documente din colecție:
+db.lineitem.find().limit(10)
+
+
+###############################################
+###Colectia supplier ###
+ 
+# Afișează un furnizor:
+db.supplier.findOne()
+
+# Numărul total de furnizori:
+db.supplier.countDocuments()
+
+# Furnizori din națiunea cu cheia 17:
+db.supplier.find({ s_nationkey: 17 })
+
+# Furnizori cu sold (s_acctbal) mai mare de 5000:
+db.supplier.find({ s_acctbal: { $gt: 5000 } }) 
+
+# Top 5 furnizori după sold descrescător:
+db.supplier.find().sort({ s_acctbal: -1 }).limit(5)
+
+# Furnizori cu comentarii care conțin cuvântul „special”:
+db.supplier.find({ s_comment: /special/i }) 
+
+# Furnizori din națiunile 1, 2 sau 3:
+db.supplier.find({ s_nationkey: { $in: [1, 2, 3] } })
+
+# Furnizori care au „23-” în prefixul numărului de telefon:
+db.supplier.find({ s_phone: /^23-/ }) 
+
+#  Furnizori cu nume care conțin „#0000001”:
+db.supplier.find({ s_name: /#0000001/ })
+
+# Lista doar cu nume și telefon, fără _id:
+db.supplier.find({}, { s_name: 1, s_phone: 1, _id: 0 }) 
+
+# Furnizori cu sold negativ (debitori):
+db.supplier.find({ s_acctbal: { $lt: 0 } })
+
+# Valori distincte pentru s_nationkey:
+db.supplier.distinct("s_nationkey")
+
+# Primele 10 înregistrări din colecție:
+db.supplier.find().limit(10)
+
+# Număr de furnizori din națiunea 5:
+db.supplier.countDocuments({ s_nationkey: 5 })
+
+##################################################
+
+###Colectia partsupp ###
+
+# Afișează un document partsupp
+db.partsupp.findOne()
+
+# Numărul total de documente în partsupp
+db.partsupp.countDocuments()
+
+# Relații pentru piesa cu ps_partkey = 100
+db.partsupp.find({ ps_partkey: 100 })
+
+# Relații pentru furnizorul cu ps_suppkey = 42
+db.partsupp.find({ ps_suppkey: 42 })
+
+# Relații unde cantitatea disponibilă este peste 500
+db.partsupp.find({ ps_availqty: { $gt: 500 } })
+
+# Relații unde costul de aprovizionare este sub 50
+db.partsupp.find({ ps_supplycost: { $lt: 50 } })
+
+# Top 5 combinații part-supplier după cost descrescător
+db.partsupp.find().sort({ ps_supplycost: -1 }).limit(5)
+
+# Număr de furnizori pentru piesa 150
+db.partsupp.countDocuments({ ps_partkey: 150 })
+
+# Lista distinctă de furnizori (ps_suppkey)
+db.partsupp.distinct("ps_suppkey")
+
+# Lista distinctă de piese (ps_partkey)
+db.partsupp.distinct("ps_partkey")
+
+
+# Afișează doar ps_partkey și ps_supplycost (fără _id)
+db.partsupp.find({}, { ps_partkey: 1, ps_supplycost: 1, _id: 0 })
+
+# Relații unde combinația part-supplier este unică (testare dubluri)
+db.partsupp.aggregate([
+  { $group: { _id: { part: "$ps_partkey", supp: "$ps_suppkey" }, count: { $sum: 1 } } },
+  { $match: { count: { $gt: 1 } } }
+])
+
+# Primele 10 înregistrări din colecție
+db.partsupp.find().limit(10)
+
+##########################################################################
+
+#### colectia partsupp_part ###
+
+# Afișează un document (piesă și furnizorii ei)
+db.partsupp_part.findOne()
+
+# Numărul total de piese în colecție
+db.partsupp_part.countDocuments()
+
+# Piesă cu p_partkey = 100
+db.partsupp_part.find({ p_partkey: 100 })
+
+# Piese de dimensiune 15
+db.partsupp_part.find({ p_size: 15 })
+
+# Piese de tip care conține „ECONOMY”
+db.partsupp_part.find({ p_type: /ECONOMY/i })
+
+# Piese cu preț peste 1000
+db.partsupp_part.find({ p_retailprice: { $gt: 1000 } })
+
+# Top 5 piese după preț, descrescător
+db.partsupp_part.find().sort({ p_retailprice: -1 }).limit(5)
+
+# Afișează doar numele și marca piesei (fără _id)
+db.partsupp_part.find({}, { p_name: 1, p_brand: 1, _id: 0 })
+
+
+# Număr de piese furnizate de furnizorul 17
+db.partsupp_part.countDocuments({ "supps.ps_suppkey": 17 })
+
+
+# Valori distincte pentru p_container
+db.partsupp_part.distinct("p_container")
+
+
+# Primele 10 înregistrări din colecție
+db.partsupp_part.find().limit(10)
+
+
+#############################################################################
+
+### colectia nation_region ###
+
+# Afișează o națiune și regiunea asociată
+db.nation_region.findOne()
+
+# Numărul total de națiuni
+db.nation_region.countDocuments()
+
+# Valori distincte pentru numele regiunilor
+db.nation_region.distinct("region.r_name")
+
+# Număr de națiuni din regiunea „ASIA”
+db.nation_region.countDocuments({ "region.r_name": "ASIA" })
+
+# Afișează doar numele țării și regiunii (fără _id)
+db.nation_region.find({}, { n_name: 1, "region.r_name": 1, _id: 0 })
+
+# Națiuni fără câmpul `n_comment`
+db.nation_region.find({ n_comment: { $exists: false } })
+
+# Regiuni fără câmpul `r_comment`
+db.nation_region.find({ "region.r_comment": { $exists: false } })
+
+# Națiuni ordonate alfabetic după nume
+db.nation_region.find().sort({ n_name: 1 }).limit(10)
+
+# Primele 10 înregistrări din colecție
+db.nation_region.find().limit(10)
+
+#############################################################
+######################################################################
+################ GROUP ####################################
+########################################################
+## Totalul comenzilor per client
+db.lineitem_orders.aggregate([
+  { $group: { _id: "$o_custkey", total_orders: { $sum: 1 }, total_value: { $sum: "$o_totalprice" } } }
+])
+
+## Totalul comenzilor per funcționar
+db.lineitem_orders.aggregate([
+  { $group: { _id: "$o_clerk", total_orders: { $sum: 1 } } }
+])
+
+## Totalul vânzărilor per dată
+db.lineitem_orders.aggregate([
+  { $group: { _id: "$o_orderdate", total_sales: { $sum: "$o_totalprice" } } },
+  { $sort: { "_id": 1 } }
+])
+
+## Total piese vândute per partkey
+db.lineitem.aggregate([
+  { $group: { _id: "$l_partkey", total_quantity: { $sum: "$l_quantity" }, avg_price: { $avg: "$l_extendedprice" } } }
+])
+
+## Total comenzi per segment de marketing
+db.customer.aggregate([
+  { $group: { _id: "$c_mktsegment", num_clients: { $sum: 1 }, avg_balance: { $avg: "$c_acctbal" } } }
+])
+
+## Total cantitate și valoare per status de retur
+db.lineitem.aggregate([
+  { $group: { _id: "$l_returnflag", total_qty: { $sum: "$l_quantity" }, total_value: { $sum: "$l_extendedprice" } } }
+])
+
+## Medie, maxim și minim pentru costul pieselor
+db.partsupp.aggregate([
+  { $group: { _id: null, avg_cost: { $avg: "$ps_supplycost" }, max_cost: { $max: "$ps_supplycost" }, min_cost: { $min: "$ps_supplycost" } } }
+])
+
+## Numărul furnizorilor per țară
+db.supplier.aggregate([
+  { $group: { _id: "$s_nationkey", num_suppliers: { $sum: 1 } } }
+])
+
+## Total valoare vândută per l_shipmode
+db.lineitem.aggregate([
+  { $group: { _id: "$l_shipmode", total: { $sum: "$l_extendedprice" } } }
+])
+
+## Total vânzări + discount mediu per dată de livrare
+db.lineitem.aggregate([
+  { $group: { _id: "$l_shipdate", total_sales: { $sum: "$l_extendedprice" }, avg_discount: { $avg: "$l_discount" } } }
+])
+
+
+## Comenzi per prioritate
+db.lineitem_orders.aggregate([
+  { $group: { _id: "$o_orderpriority", total: { $sum: 1 } } }
+])
+
+## Număr piese distincte vândute
+db.lineitem.aggregate([
+  { $group: { _id: "$l_partkey" } },
+  { $count: "distinct_parts" }
+])
+
+## Medie solduri clienți pe țări
+db.customer.aggregate([
+  { $group: { _id: "$c_nationkey", avg_balance: { $avg: "$c_acctbal" } } }
+])
+
+## Total cantitate livrată de fiecare furnizor
+db.lineitem.aggregate([
+  { $group: { _id: "$l_suppkey", total_qty: { $sum: "$l_quantity" } } }
+])
+
+## Număr comenzi + valoare medie pe client
+db.lineitem_orders.aggregate([
+  { $group: { _id: "$o_custkey", num_orders: { $sum: 1 }, avg_value: { $avg: "$o_totalprice" } } }
+])
+
+## Total discount acordat pe piesă
+db.lineitem.aggregate([
+  { $group: { _id: "$l_partkey", total_discount: { $sum: "$l_discount" } } }
+])
+
+## Număr furnizori + medie sold pe țară
+db.supplier.aggregate([
+  { $group: { _id: "$s_nationkey", avg_acctbal: { $avg: "$s_acctbal" }, num_suppliers: { $sum: 1 } } }
+])
+
+##. Medie preț per container
+db.partsupp_part.aggregate([
+  { $group: { _id: "$p_container", avg_price: { $avg: "$p_retailprice" } } }
+])
+
+## Număr total de comenzi pe an
+db.lineitem_orders.aggregate([
+  { $group: { _id: { $substr: ["$o_orderdate", 0, 4] }, orders: { $sum: 1 } } },
+  { $sort: { "_id": 1 } }
+])
+
+# Total comenzi și valoare per an și lună
+db.lineitem_orders.aggregate([ { $group: { _id: { year: { $substr: ["$o_orderdate", 0, 4] },  month: { $substr: ["$o_orderdate", 5, 2] } }, total_orders: { $sum: 1 }, total_value: { $sum: "$o_totalprice" } } }, { $sort: { "_id.year": 1, "_id.month": 1 } } ])
+
+# Top 5 clienți cu cele mai multe comenzi
+db.lineitem_orders.aggregate([ { $group: { _id: "$o_custkey", total_orders: { $sum: 1 } } }, { $sort: { total_orders: -1 } }, { $limit: 5 } ])
+
+# Top 5 furnizori după cantitate livrată
+db.lineitem.aggregate([ { $group: { _id: "$l_suppkey", total_qty: { $sum: "$l_quantity" } } }, { $sort: { total_qty: -1 } }, { $limit: 5 } ])
+
+# Număr total de produse returnate pe lună
+db.lineitem.aggregate([ { $match: { l_returnflag: "R" } }, { $group: { _id: { year: { $substr: ["$l_shipdate", 0, 4] },  month: { $substr: ["$l_shipdate", 5, 2] } }, total_returns: { $sum: 1 } } }, { $sort: { "_id.year": 1, "_id.month": 1 } } ])
+
+# Total venit (cu discount aplicat) pe client
+db.lineitem.aggregate([ { $group: { _id: "$l_orderkey", revenue: { $sum: { $multiply: [ "$l_extendedprice", { $subtract: [1, "$l_discount"] } ] } } } } ])
+
+
+# Total venit per segment de client
+db.customer.aggregate([ { $lookup: { from: "lineitem_orders", localField: "c_custkey", foreignField: "o_custkey", as: "orders" } }, { $unwind: "$orders" }, { $group: { _id: "$c_mktsegment", total_value: { $sum: "$orders.o_totalprice" } } } ])
+
+# Top 3 metode de livrare după valoare totală
+db.lineitem.aggregate([ { $group: {_id: "$l_shipmode", total_value: { $sum: "$l_extendedprice" } } }, { $sort: { total_value: -1 } }, { $limit: 3 } ])
+
+# Total valoare vândută per pereche furnizor-piesă
+db.lineitem.aggregate([ { $group: { _id: { suppkey: "$l_suppkey", partkey: "$l_partkey" }, total_value: { $sum: "$l_extendedprice" } } }, { $sort: { total_value: -1 } } ])
+
+# Top 5 clienți după venit generat (cu discount inclus)
+db.lineitem.aggregate([ { $group: { _id: "$l_orderkey", revenue: { $sum: { $multiply: [ "$l_extendedprice", { $subtract: [1, "$l_discount"] } ] } } } }, { $lookup: { from: "lineitem_orders", localField: "_id", foreignField: "o_orderkey", as: "order" } }, { $unwind: "$order" }, { $group: { _id: "$order.o_custkey", total_revenue: { $sum: "$revenue" } } }, { $sort: { total_revenue: -1 } }, { $limit: 5 } ])
+
+#####################################################################
+######################## match ####################################
+#############################################################
+
+## Clienți din segmentul BUILDING
+db.customer.aggregate([
+  { $match: { c_mktsegment: "BUILDING" } }
+])
+
+## Comenzi plasate înainte de 1 ianuarie 1995
+db.lineitem_orders.aggregate([
+  { $match: { o_orderdate: { $lt: "1995-01-01" } } }
+])
+
+## Furnizori din națiunea 5
+db.supplier.aggregate([
+  { $match: { s_nationkey: 5 } }
+])
+
+## Clienți cu sold mai mare de 5000
+db.customer.aggregate([
+  { $match: { c_acctbal: { $gt: 5000 } } }
+])
+
+## Linii de comandă cu cantitate mai mare de 50
+db.lineitem.aggregate([
+  { $match: { l_quantity: { $gt: 50 } } }
+])
+
+## Linii cu discount mai mare de 5%
+db.lineitem.aggregate([
+  { $match: { l_discount: { $gt: 0.05 } } }
+])
+
+# Comenzi cu statusul "F"
+db.lineitem_orders.aggregate([
+  { $match: { o_orderstatus: "F" } }
+])
+
+## Linii livrate prin metoda "MAIL"
+db.lineitem.aggregate([
+  { $match: { l_shipmode: "MAIL" } }
+])
+
+## Clienți din națiunea 3 cu sold negativ
+db.customer.aggregate([
+  { $match: { c_nationkey: 3, c_acctbal: { $lt: 0 } } }
+])
+
+## Furnizori cu sold negativ
+db.supplier.aggregate([
+  { $match: { s_acctbal: { $lt: 0 } } }
+])
+
+## Piese cu preț mai mare de 1000
+db.partsupp_part.aggregate([
+  { $match: { p_retailprice: { $gt: 1000 } } }
+])
+
+## Piese de dimensiune 15 și container SMALL BOX
+db.partsupp_part.aggregate([
+  { $match: { p_size: 15, p_container: "SM BOX" } }
+])
+
+## Linii livrate între două date
+db.lineitem.aggregate([ { $match: { l_shipdate: { $gte: "1995-01-01", $lt: "1996-01-01" } } }])
+
+## Clienți care au comentarii care conțin „quick”
+db.customer.aggregate([
+  { $match: { c_comment: /quick/i } }
+])
+
+## Linii returnate (flag = R)
+db.lineitem.aggregate([
+  { $match: { l_returnflag: "R" } }
+])
+
+## Comenzi cu valoare mai mare de 150000
+db.lineitem_orders.aggregate([
+  { $match: { o_totalprice: { $gt: 150000 } } }
+])
+
+## Linii cu instrucțiunea „DELIVER IN PERSON”
+db.lineitem.aggregate([
+  { $match: { l_shipinstruct: "DELIVER IN PERSON" } }
+])
+
+## Furnizori cu nume care conține „#0000005”
+db.supplier.aggregate([
+  { $match: { s_name: /#0000005/ } }
+])
+
+## Clienți cu telefon care începe cu „22-”
+db.customer.aggregate([
+  { $match: { c_phone: /^22-/ } }
+])
+
+## Piese cu tip care conține „ECONOMY ANODIZED”
+db.partsupp_part.aggregate([
+  { $match: { p_type: /ECONOMY ANODIZED/i } }
+])
+
+
+##########################################################################
+############################### unwind ##########################
+#########################################################################
+
+## Unwind array-ul lineitem din comenzi (lineitem_orders)
+db.lineitem_orders.aggregate([
+  { $unwind: "$lineitem" }
+])
+
+## Unwind array-ul supps din partsupp_part
+db.partsupp_part.aggregate([
+  { $unwind: "$supps" }
+])
+
+## Unwind array-ul supps din partsupp_part
+db.partsupp_part.aggregate([
+  { $unwind: "$supps" }
+])
+
+## Unwind lineitem + afișează partkey și quantity
+db.lineitem_orders.aggregate([
+  { $unwind: "$lineitem" },
+  { $project: { o_orderkey: 1, l_partkey: "$lineitem.l_partkey", l_quantity: "$lineitem.l_quantity"} } ])
+
+## Unwind supps + proiectează nume piesă și costul de aprovizionare
+db.partsupp_part.aggregate([
+  { $unwind: "$supps" },
+  {  $project: { p_name: 1,  ps_supplycost: "$supps.ps_supplycost"   } }])
+
+
+## Unwind lineitem + grupează pe l_partkey
+db.lineitem_orders.aggregate([
+  { $unwind: "$lineitem" },
+  { $group: {_id: "$lineitem.l_partkey", total_qty: { $sum: "$lineitem.l_quantity" } } } ])
+
+## Unwind lineitem  + calculează discount mediu per piesă
+db.lineitem_orders.aggregate([
+  { $unwind: "$lineitem" },
+  { $group: { _id: "$lineitem.l_partkey", avg_discount: { $avg: "$lineitem.l_discount" } } } ])
+
+## Unwind supps + grupează după furnizor pentru numărul de piese
+db.partsupp_part.aggregate([
+  { $unwind: "$supps" },
+  {   $group: {   _id: "$supps.ps_suppkey",     num_parts: { $sum: 1 }   } } ])
+
+## Unwind lineitem + sortează descrescător in functie de extendedprice
+db.lineitem_orders.aggregate([
+  { $unwind: "$lineitem" },
+  {  $sort: { "lineitem.l_extendedprice": -1 } }])
+
+
+## Unwind lineitem și afișează doar comenzile cu discount > 0.07
+db.lineitem_orders.aggregate([
+  { $unwind: "$lineitem" },
+  { $match: { "lineitem.l_discount": { $gt: 0.07 } } },
+  { $project: { o_orderkey: 1, discount: "$lineitem.l_discount" } }
+])
+
+
+
+
+############################################################################
+#############################  project ################################
+############################################################################
+
+## Afișează doar numele și nr de telefon al clientului
+db.customer.aggregate([
+  { $project: { c_name: 1, c_phone: 1, _id: 0 } }
+])
+
+## Comenzi doar cu orderkey, totalprice și orderdate
+db.lineitem_orders.aggregate([
+  { $project: { o_orderkey: 1, o_totalprice: 1, o_orderdate: 1, _id: 0 } }
+])
+
+## Furnizori cu nume și sold redenumit ca "balance"
+db.supplier.aggregate([ { $project: { s_name: 1, balance: "$s_acctbal", _id: 0  }  }])
+
+## Piese cu preț + TVA 19%
+db.partsupp_part.aggregate([ { $project: { p_name: 1, price_with_vat: { $multiply: ["$p_retailprice", 1.19] } } } ])
+
+## Afișează doar `c_custkey` și primele 3 caractere din `c_phone`
+db.customer.aggregate([ { $project: { c_custkey: 1, phone_prefix: { $substr: ["$c_phone", 0, 3] } } } ])
+
+## Linii de comandă cu total per linie (qty * price)
+db.lineitem.aggregate([ { $project: { l_orderkey: 1, total_line: { $multiply: ["$l_quantity", "$l_extendedprice"] } } } ])
+
+### Comenzi >100000
+db.lineitem_orders.aggregate([ { $project: { o_orderkey: 1, o_totalprice: 1, category: { $cond: { if: { $gt: ["$o_totalprice", 100000] }, then: "MARE", else: "NORMAL" } } } } ])
+
+## Piese cu marcă + container concatenate
+db.partsupp_part.aggregate([ { $project: { p_name: 1, full_label: { $concat: ["$p_brand", " - ", "$p_container"] } } } ])
+
+## Furnizori cu sold absolut (valoare pozitivă)
+db.supplier.aggregate([ { $project: { s_name: 1, abs_balance: { $abs: "$s_acctbal" } } } ])
+
+## Linii doar cu partkey și anul livrării
+db.lineitem.aggregate([ { $project: { l_partkey: 1, ship_year: { $substr: ["$l_shipdate", 0, 4] } } } ])
+
+## Clienți cu segment redenumit și sold rotunjit
+db.customer.aggregate([ { $project: { c_name: 1, segment: "$c_mktsegment",  rounded_balance: { $round: ["$c_acctbal", 0] } } } ])
+
+## Linii de comandă doar cu cantitate și discount în procente
+db.lineitem.aggregate([ { $project: { l_orderkey: 1, quantity: "$l_quantity", discount_percent: { $multiply: ["$l_discount", 100] } } } ])
+
+## Comenzi cu data separata în zi, lună, an
+db.lineitem_orders.aggregate([ { $project: { o_orderkey: 1, day: { $substr: ["$o_orderdate", 8, 2] }, month: { $substr: ["$o_orderdate", 5, 2] }, year: { $substr: ["$o_orderdate", 0, 4] } } } ])
+
+## Clienți cu etichetă "VIP" dacă soldul > 10000
+db.customer.aggregate([ { $project: { c_name: 1, vip_status: { $cond: { if: { $gt: ["$c_acctbal", 10000] }, then: "VIP", else: "Standard" } } } } ])
+
+
+##########################################################################
+####################### sort #######################################
+############################################################################
+## Clienți ordonați alfabetic după nume (crescător)
+db.customer.aggregate([
+  { $sort: { c_name: 1 } }
+])
+
+## Clienți ordonați după sold (descrescător)
+db.customer.aggregate([
+  { $sort: { c_acctbal: -1 } }
+])
+
+## Comenzi ordonate descrescător după valoare totală
+db.lineitem_orders.aggregate([
+  { $sort: { o_totalprice: -1 } }
+])
+
+## Comenzi ordonate după dată (cele mai vechi primele)
+db.lineitem_orders.aggregate([
+  { $sort: { o_orderdate: 1 } }
+])
+
+## Furnizori ordonați alfabetic după nume
+db.supplier.aggregate([
+  { $sort: { s_name: 1 } }
+])
+
+## Furnizori ordonați descrescător după sold
+db.supplier.aggregate([
+  { $sort: { s_acctbal: -1 } }
+])
+
+## Linii de comandă ordonate după cantitate (descrescător)
+db.lineitem.aggregate([
+  { $sort: { l_quantity: -1 } }
+])
+
+## Linii ordonate crescător după taxă
+db.lineitem.aggregate([
+  { $sort: { l_tax: 1 } }
+])
+
+## Piese ordonate după preț retail (descrescător)
+db.partsupp_part.aggregate([
+  { $sort: { p_retailprice: -1 } }
+])
+
+## Piese ordonate crescător după dimensiune
+db.partsupp_part.aggregate([
+  { $sort: { p_size: 1 } }
+])
+
+## Comenzi ordonate după orderpriority și dată
+db.lineitem_orders.aggregate([
+  { $sort: { o_orderpriority: 1, o_orderdate: 1 } }
+])
+
+## Clienți ordonați după segment și apoi după nume
+db.customer.aggregate([
+  { $sort: { c_mktsegment: 1, c_name: 1 } }
+])
+
+## Linii ordonate după discount și apoi după cantitate
+db.lineitem.aggregate([
+  { $sort: { l_discount: -1, l_quantity: -1 } }
+])
+
+## Furnizori ordonați după națiune și sold
+db.supplier.aggregate([
+  { $sort: { s_nationkey: 1, s_acctbal: -1 } }
+])
+
+
+#############################################################################
+############### limit #####################################
+############################################################################
+
+## Primele 10 documente din colecția customer
+db.customer.aggregate([
+  { $limit: 10 }
+])
+
+## Primele 5 comenzi cu valoare mare
+db.lineitem_orders.aggregate([
+  { $sort: { o_totalprice: -1 } },
+  { $limit: 5 }
+])
+
+##. Primele 3 furnizori după sold
+db.supplier.aggregate([
+  { $sort: { s_acctbal: -1 } },
+  { $limit: 3 }
+])
+
+## Primele 7 linii de comandă cu cantitate mare
+db.lineitem.aggregate([
+  { $sort: { l_quantity: -1 } },
+  { $limit: 7 }
+])
+
+## Primele 5 piese cele mai scumpe
+db.partsupp_part.aggregate([
+  { $sort: { p_retailprice: -1 } },
+  { $limit: 5 }
+])
+
+## Primii 10 clienți ordonati alfabetic
+db.customer.aggregate([
+  { $sort: { c_name: 1 } },
+  { $limit: 10 }
+])
+
+## Primele 5 comenzi din anul 1995
+db.lineitem_orders.aggregate([
+  { $match: { o_orderdate: { $regex: /^1995/ } } },
+  { $limit: 5 }
+])
+
+## Primele 3 piese de dimensiune mare
+db.partsupp_part.aggregate([
+  { $sort: { p_size: -1 } },
+  { $limit: 3 }
+])
+
+## Primii 10 furnizori din națiunea 5
+db.supplier.aggregate([
+  { $match: { s_nationkey: 5 } },
+  { $limit: 10 }
+])
+
+## Primele 10 linii cu discount mare
+db.lineitem.aggregate([
+  { $sort: { l_discount: -1 } },
+  { $limit: 10 }
+])
+
+## Primii 5 clienți din segmentul BUILDING
+db.customer.aggregate([
+  { $match: { c_mktsegment: "BUILDING" } },
+  { $limit: 5 }
+])
+
+## Primele 4 comenzi cu status O
+db.lineitem_orders.aggregate([
+  { $match: { o_orderstatus: "O" } },
+  { $limit: 4 }
+])
+
+## Primele 6 piese ambalate în SMALL BOX
+db.partsupp_part.aggregate([
+  { $match: { p_container: "SM BOX" } },
+  { $limit: 6 }
+])
+
+## Primii 8 clienți cu sold negativ
+db.customer.aggregate([
+  { $match: { c_acctbal: { $lt: 0 } } },
+  { $limit: 8 }])
+
+## Primii 10 furnizori cu nr de telefon care începe cu „15-”
+db.supplier.aggregate([
+  { $match: { s_phone: /^15-/ } },
+  { $limit: 10 }
+])
+
+## Top 10 clienți cu cel mai mare sold, afișând doar nume și sold
+db.customer.aggregate([
+  { $sort: { c_acctbal: -1 } },
+  { $limit: 10 },
+  { $project: { c_name: 1, c_acctbal: 1, _id: 0 } }
+])
+
+## Primele 5 comenzi din 1996 cu valoare mare
+db.lineitem_orders.aggregate([
+  { $match: { o_orderdate: { $regex: /^1996/ } } },
+  { $sort: { o_totalprice: -1 } },
+  { $limit: 5 },
+  { $project: { o_orderkey: 1, o_totalprice: 1, o_orderdate: 1 } }
+])
+
+## Primele 10 linii cu discount > 5%, afișând partkey și discount
+db.lineitem.aggregate([
+  { $match: { l_discount: { $gt: 0.05 } } },
+  { $sort: { l_discount: -1 } },
+  { $limit: 10 },
+  { $project: { l_partkey: 1, l_discount: 1 } }
+])
+
+## Top 5 clienți care apar cel mai frecvent în comenzi
+db.lineitem_orders.aggregate([
+  { $group: { _id: "$o_custkey", num_orders: { $sum: 1 } } },
+  { $sort: { num_orders: -1 } },
+  { $limit: 5 }
+])
+
+##  Primele 5 națiuni cu cei mai mulți furnizori
+db.supplier.aggregate([
+  { $group: { _id: "$s_nationkey", num_suppliers: { $sum: 1 } } },
+  { $sort: { num_suppliers: -1 } },
+  { $limit: 5 }
+])
+
+## Primele 3 segmente de piață cu cele mai mari solduri medii
+db.customer.aggregate([
+  { $group: { _id: "$c_mktsegment", avg_balance: { $avg: "$c_acctbal" } } },
+  { $sort: { avg_balance: -1 } },
+  { $limit: 3 }
+])
+
+
+## Primii 3 furnizori cu cel mai lung comentariu
+db.supplier.aggregate([ { $project: { s_name: 1, comment_length: { $strLenCP: "$s_comment" } } }, { $sort: { comment_length: -1 } }, { $limit: 3 } ])
+
+## Top 5 piese cu cel mai mare preț cu TVA calculat
+db.partsupp_part.aggregate([
+  {  $project: { p_name: 1, price_with_vat: { $multiply: ["$p_retailprice", 1.19] } } },
+{ $sort: { price_with_vat: -1 } }, { $limit: 5 }])
+
+##  Primele 5 linii cu cea mai mare valoare totală (qty * price)
+db.lineitem.aggregate([
+  { $project: { l_orderkey: 1, total_value: { $multiply: ["$l_quantity", "$l_extendedprice"] } } }, { $sort: { total_value: -1 } }, { $limit: 5 } ])
+
+
+#############################################################################
+################################ bucket ######################################
+###########################################################################
+
+
+## Grupare clienți după sold (c_acctbal)
+db.customer.aggregate([ { $bucket: { groupBy: "$c_acctbal", boundaries: [-10000, 0, 5000, 10000, 20000], default: "over_20000", output: { count: { $sum: 1 }, avg_balance: { $avg: "$c_acctbal" } } } } ])
+
+## Grupare furnizori după sold
+db.supplier.aggregate([ { $bucket: { groupBy: "$s_acctbal", boundaries: [-5000, 0, 5000, 10000], default: "over_10000", output: { suppliers: { $sum: 1 }, avg_balance: { $avg: "$s_acctbal" } } } } ])
+
+## Grupare piese după preț
+db.partsupp_part.aggregate([
+  { $bucket: { groupBy: "$p_retailprice", boundaries: [0, 500, 1000, 1500, 2000], default: "over_2000", output: { num_parts: { $sum: 1 }, avg_price: { $avg: "$p_retailprice" } } } } ])
+
+## Grupare comenzi după valoarea totală
+db.lineitem_orders.aggregate([
+  { $bucket: { groupBy: "$o_totalprice", boundaries: [0, 50000, 100000, 150000, 200000], default: "over_200000", output: { orders: { $sum: 1 } } } } ])
+
+## Grupare discount în lineitem
+db.lineitem.aggregate([
+  { $bucket: { groupBy: "$l_discount", boundaries: [0, 0.03, 0.06, 0.09, 0.12], default: "over_0.12", output: { num_lines: { $sum: 1 }, avg_discount: { $avg: "$l_discount" } } } } ])
+
+## Grupare piese după dimensiune
+db.partsupp_part.aggregate([
+  { $bucket: { groupBy: "$p_size", boundaries: [0, 10, 20, 30, 40], default: "over_40", output: { num_parts: { $sum: 1 } } } } ])
+
+## Grupare taxe per linie de comandă
+db.lineitem.aggregate([
+  { $bucket: { groupBy: "$l_tax", boundaries: [0, 0.05, 0.10, 0.15], default: "over_0.15", output: { total_lines: { $sum: 1 }, avg_tax: { $avg: "$l_tax" } } } } ])
+
+## Grupare cantitate comandată
+db.lineitem.aggregate([
+  { $bucket: { groupBy: "$l_quantity", boundaries: [0, 20, 40, 60, 80, 100], default: "over_100", output: { lines: { $sum: 1 }, avg_qty: { $avg: "$l_quantity" } } } } ])
+
+## Grupare comenzile după an (convertit din string)
+db.lineitem_orders.aggregate([
+  { $project: { year: { $toInt: { $substr: ["$o_orderdate", 0, 4] } } } },
+  { $bucket: { groupBy: "$year", boundaries: [1992, 1994, 1996, 1998], default: "after_1998", output: { orders: { $sum: 1 } } } } ])
+
+## Grupare preț piese cu etichetă în output
+db.partsupp_part.aggregate([
+  { $bucket: { groupBy: "$p_retailprice", boundaries: [0, 800, 1200, 1600], default: "over_1600", output: { count: { $sum: 1 }, label: { $push: "$p_name" } } } } ])
+
+## Grupare clienți după lungimea numelui
+db.customer.aggregate([
+  { $project: { name_length: { $strLenCP: "$c_name" } } },
+  { $bucket: { groupBy: "$name_length", boundaries: [0, 10, 20, 30, 40], default: "very_long", output: { clients: { $sum: 1 } } } } ])
+
+### Grupare furnizori după lungimea comentariului
+db.supplier.aggregate([
+  { $project: { comment_length: { $strLenCP: "$s_comment" } } },
+  { $bucket: { groupBy: "$comment_length", boundaries: [0, 20, 40, 60, 80], default: "very_verbose", output: { suppliers: { $sum: 1 } } } } ])
+
+## Grupare discount în procente
+db.lineitem.aggregate([
+  { $project: { discount_pct: { $multiply: ["$l_discount", 100] } } },
+  { $bucket: { groupBy: "$discount_pct", boundaries: [0, 3, 6, 9, 12], default: "over_12%", output: { num_items: { $sum: 1 } } } } ])
+
+## Grupare piese după lungimea comentariului
+db.partsupp_part.aggregate([
+  { $project: { comment_len: { $strLenCP: "$p_comment" } } },
+  { $bucket: { groupBy: "$comment_len", boundaries: [0, 20, 40, 60, 80], default: "long_comment", output: { parts: { $sum: 1 } } } } ])
+
+
+#############################################################################
+###########################  merge ########################################
+############################################################################
+
+
+## Top 100 comenzi după valoare într-o colecție nouă
+db.lineitem_orders.aggregate([
+  { $sort: { o_totalprice: -1 } },
+  { $limit: 100 },
+  { $merge: "top_100_orders" }
+])
+
+
+
+#########################################################################
+
+
+######################################################################
+############################ facet ###############################
+#####################################################################
+
+## Total comenzi + total clienți într-un singur răspuns
+db.lineitem_orders.aggregate([
+  { $facet: { total_orders: [ { $count: "count" } ], total_customers: [ { $lookup: { from: "customer", localField: "o_custkey", foreignField: "c_custkey", as: "customer" } }, { $group: { _id: "$o_custkey" } }, { $count: "count" } ] } } ])
+
+
+## Număr comenzi „O” și „F”
+db.lineitem_orders.aggregate([ { $facet: { open: [ { $match: { o_orderstatus: "O" } }, { $count: "count" } ], filled: [ { $match: { o_orderstatus: "F" } }, { $count: "count" } ] }}])
+
+## Clienți cu sold < 0 vs sold ≥ 0
+db.customer.aggregate([ { $facet: { negativ: [ { $match: { c_acctbal: { $lt: 0 } } }, { $count: "count" } ], pozitiv: [ { $match: { c_acctbal: { $gte: 0 } } }, { $count: "count" } ] } } ])
+
+## Piese mari vs mici in functie de dimensiune
+db.partsupp_part.aggregate([ { $facet: {  mici: [ { $match: { p_size: { $lte: 15 } } }, { $count: "count" } ], mari: [ { $match: { p_size: { $gt: 15 } } }, { $count: "count" } ] } } ])
+
+# Clienți pe 3 segmente populare
+db.customer.aggregate([ { $facet: { building: [ { $match: { c_mktsegment: "BUILDING" } }, { $count: "count" } ], automobile: [ { $match: { c_mktsegment: "AUTOMOBILE" } }, { $count: "count" } ], machinery: [ { $match: { c_mktsegment: "MACHINERY" } }, { $count: "count" } ] } }])
+ 
+## Linii cu discount < 0.03, între 0.03-0.07, > 0.07
+db.lineitem.aggregate([ { $facet: { low: [ { $match: { l_discount: { $lt: 0.03 } } }, { $count: "count" } ], medium: [ { $match: { l_discount: { $gte: 0.03, $lte: 0.07 } } }, { $count: "count" } ], high: [ { $match: { l_discount: { $gt: 0.07 } } }, { $count: "count" } ] } } ])
+
+## Comenzi după prioritate
+db.lineitem_orders.aggregate([ { $facet: { low: [ { $match: { o_orderpriority: "5-LOW" } }, { $count: "count" } ], high: [ { $match: { o_orderpriority: "1-URGENT" } }, { $count: "count" } ] } } ])
+
+## Grupare furnizori după sold: negativ, mediu, mare
+db.supplier.aggregate([ { $facet: { negativ: [ { $match: { s_acctbal: { $lt: 0 } } }, { $count: "count" } ], mediu: [ { $match: { s_acctbal: { $gte: 0, $lte: 5000 } } }, { $count: "count" } ], mare: [ { $match: { s_acctbal: { $gt: 5000 } } }, { $count: "count" } ] } } ])
+
+
+## Comenzi după ani 1993, 1994, 1995
+db.lineitem_orders.aggregate([ {  $facet: {  y1993: [ { $match: { o_orderdate: { $regex: /^1993/ } } }, { $count: "count" } ], y1994: [ { $match: { o_orderdate: { $regex: /^1994/ } } }, { $count: "count" } ], y1995: [ { $match: { o_orderdate: { $regex: /^1995/ } } }, { $count: "count" } ] } } ])
+
+## Clienți cu nr de telefon cu prefixele 15, 16, 17
+db.customer.aggregate([ { $facet: { prefix15: [ { $match: { c_phone: /^15-/ } }, { $count: "count" } ], prefix16: [ { $match: { c_phone: /^16-/ } }, { $count: "count" } ], prefix17: [ { $match: { c_phone: /^17-/ } }, { $count: "count" } ] } } ])
+
+## Piese după container: SMALL, MED, LG
+db.partsupp_part.aggregate([ { $facet: { small: [ { $match: { p_container: /SM/i } }, { $count: "count" } ], medium: [ { $match: { p_container: /MED/i } }, { $count: "count" } ], large: [ { $match: { p_container: /LG/i } }, { $count: "count" } ] } } ])
+
+## Linii de comandă după taxă: mică, medie, mare
+db.lineitem.aggregate([ { $facet: { mica: [ { $match: { l_tax: { $lt: 0.05 } } }, { $count: "count" } ], medie: [ { $match: { l_tax: { $gte: 0.05, $lte: 0.08 } } }, { $count: "count" } ], mare: [ { $match: { l_tax: { $gt: 0.08 } } }, { $count: "count" } ] } } ])
+
+## Piese după tip: PROMO, ECONOMY, STANDARD
+db.partsupp_part.aggregate([ { $facet: { promo: [ { $match: { p_type: /PROMO/i } }, { $count: "count" } ], economy: [ { $match: { p_type: /ECONOMY/i } }, { $count: "count" } ], standard: [ { $match: { p_type: /STANDARD/i } }, { $count: "count" } ] } } ])
+
+###################################################################
+###################################################################
+#####################  LOOKUP #################################
+###################################################################
+
+# Comenzi + numele clientului
+db.lineitem_orders.aggregate([ { $lookup: { from: "customer", localField: "o_custkey", foreignField: "c_custkey", as: "customer" } }, { $unwind: "$customer" }, { $project: { o_orderkey: 1, c_name: "$customer.c_name", o_totalprice: 1 } } ])
+
+# Linii de comandă + detalii despre piesă
+db.lineitem.aggregate([ { $lookup: { from: "partsupp_part", localField: "l_partkey", foreignField: "p_partkey", as: "part" } }, { $unwind: "$part" }, { $project: { l_orderkey: 1, p_name: "$part.p_name", l_quantity: 1, l_extendedprice: 1 } } ])
+
+# Furnizori + piesele pe care le oferă
+db.supplier.aggregate([ { $lookup: { from: "partsupp", localField: "s_suppkey", foreignField: "ps_suppkey", as: "parts" } } ])
+
+# Clienți + comenzile lor
+db.customer.aggregate([ { $lookup: { from: "lineitem_orders", localField: "c_custkey", foreignField: "o_custkey", as: "orders" } } ])
+
+
+# Linii de comandă + furnizor
+db.lineitem.aggregate([ { $lookup: { from: "supplier", localField: "l_suppkey", foreignField: "s_suppkey", as: "supplier" } }, { $unwind: "$supplier" }, { $project: { l_orderkey: 1, s_name: "$supplier.s_name", l_quantity: 1 } } ])
+
+# Comenzi + toate piesele implicate
+db.lineitem_orders.aggregate([ { $unwind: "$lineitem" }, { $lookup: { from: "partsupp_part", localField: "lineitem.l_partkey", foreignField: "p_partkey", as: "part_info" } }, { $unwind: "$part_info" }, { $project: { o_orderkey: 1, p_name: "$part_info.p_name", l_quantity: "$lineitem.l_quantity" } } ])
+
+
+# Comenzi + segmentele clienților
+db.lineitem_orders.aggregate([ { $lookup: { from: "customer", localField: "o_custkey", foreignField: "c_custkey",  as: "customer" } },
+  { $unwind: "$customer" },
+  { $project: { o_orderkey: 1, c_name: "$customer.c_name", c_mktsegment: "$customer.c_mktsegment" } } ])
+
+
+# Linii + piesă + furnizor
+db.lineitem.aggregate([ { $lookup: { from: "partsupp_part", localField: "l_partkey", foreignField: "p_partkey", as: "part" } },
+  { $unwind: "$part" },
+  { $lookup: { from: "supplier", localField: "l_suppkey", foreignField: "s_suppkey", as: "supplier" } },
+  { $unwind: "$supplier" },
+  { $project: { l_orderkey: 1, p_name: "$part.p_name", s_name: "$supplier.s_name", l_quantity: 1 } } ])
+
+# Clienți + număr de comenzi
+db.customer.aggregate([ { $lookup: { from: "lineitem_orders", localField: "c_custkey", foreignField: "o_custkey", as: "orders" } }, { $project: { c_name: 1, num_orders: { $size: "$orders" } } } ])
+
+# Națiuni + regiuni + furnizorii din acea țară
+db.nation_region.aggregate([ { $lookup: { from: "supplier", localField: "n_nationkey", foreignField: "s_nationkey", as: "suppliers" } }, { $project: { n_name: 1, region: "$region.r_name", suppliers: "$suppliers.s_name" } } ])
+
+
+# Clienți din segmentul BUILDING + număr comenzi
+db.customer.aggregate([ { $match: { c_mktsegment: "BUILDING" } }, { $lookup: { from: "lineitem_orders", localField: "c_custkey", foreignField: "o_custkey", as: "orders" } }, { $project: { c_name: 1, num_orders: { $size: "$orders" } } }])
+
+
+## nr mediu de linii per comanda 
+db.lineitem.aggregate([ { $group: { _id: "$l_orderkey", line_count: { $sum: 1 } } }, { $group: { _id: null, avg_lines_per_order: { $avg: "$line_count" } } } ])
+
+
+## top 5 furnizori dupa valoarea livrarilor
+db.lineitem.aggregate([ { $group: { _id: "$l_suppkey", total_supplied_value: {  $sum: { $multiply: [  "$l_extendedprice", { $subtract: [1, "$l_discount"] } ] } } } }, { $sort: { total_supplied_value: -1 } }, { $limit: 5 } ])
+
+
+## totalul comenzilor si media valorii pe segment de client
+db.lineitem_orders.aggregate([ { $lookup: { from: "customer", localField: "o_custkey", foreignField: "c_custkey", as: "customer" } }, { $unwind: "$customer" }, { $group: { _id: "$customer.c_mktsegment", total_orders: { $sum: 1 }, avg_order_value: { $avg: "$o_totalprice" } } }, { $sort: { avg_order_value: -1 } } ])
+
+
+##################
+
+## produse care apar in mai mult de 30 de linii de comanda
+db.lineitem.aggregate([ { $group: { _id: "$l_partkey", line_count: { $sum: 1 } } }, { $match: { line_count: { $gt: 30 } } }, { $sort: { line_count: -1 } } ])
+
+
+## pret minim si maxim pe container 
+db.partsupp_part.aggregate([ { $group: { _id: "$p_container", min_price: { $min: "$p_retailprice" },  max_price: { $max: "$p_retailprice" } } }, { $sort: { _id: 1 } } ])
+
+
+## top 5 ani in care au fost facute cele mai multe comenzi
+db.lineitem_orders.aggregate([ { $group: { _id: { $substr: ["$o_orderdate", 0, 4] }, total_orders: { $sum: 1 } } }, { $sort: { total_orders: -1 } }, { $limit: 5 } ])
+
+## distribuirea produselor in intervale de pret 
+db.partsupp_part.aggregate([ { $bucket: { groupBy: "$p_retailprice", boundaries: [0, 500, 1000, 1500, 2000, 3000], default: "Over 3000", output: { count: { $sum: 1 }, avg_price: { $avg: "$p_retailprice" } } } } ])
+
+
+### valoarea medie a comenzilor in fiecare an
+db.lineitem_orders.aggregate([ { $group: { _id: { $substr: ["$o_orderdate", 0, 4] }, avg_order_value: { $avg: "$o_totalprice" } } }, { $sort: { "_id": 1 } } ])
+
+
+### suma totala a discounturilor acordate in fiecare an
+db.lineitem.aggregate([ { $group: { _id: { $substr: ["$l_shipdate", 0, 4] }, total_discount: { $sum: "$l_discount" } } } ])
+
+
+### produse care apar in mai mult de 50 de comenzi
+db.lineitem.aggregate([ { $group: { _id: "$l_partkey", orders: { $addToSet: "$l_orderkey" } } }, { $project: {  order_count: { $size: "$orders" } } }, { $match: { order_count: { $gt: 50 } } } ])
+
+
+### valoare totala din livrari pe fiecare zi
+db.lineitem.aggregate([ { $group: { _id: "$l_shipdate", daily_value: { $sum: { $multiply: [ "$l_extendedprice", { $subtract: [1, "$l_discount"] } ] } } } }, { $sort: { _id: 1 } } ])
+
+
+
+### nr comenzilor in functie de prioritate
+db.lineitem_orders.aggregate([ { $group: { _id: "$o_orderpriority", total_orders: { $sum: 1 } } }, { $sort: { total_orders: -1 } } ])
+
+
+### cele mai comune marci de piese (top 5)
+db.partsupp_part.aggregate([ { $group: { _id: "$p_brand",  count: { $sum: 1 } } }, { $sort: { count: -1 } }, { $limit: 5 } ])
+
+
+### total furnizori in functie de tara de provenienta
+db.supplier.aggregate([ { $group: { _id: "$s_nationkey", total_suppliers: { $sum: 1 } } }, { $sort: { total_suppliers: -1 } } ])
+
+### nr de retururi in functie de motiv
+db.lineitem.aggregate([ { $group: { _id: "$l_returnflag", num_returned_items: { $sum: 1 } } }, { $sort: { num_returned_items: -1 } } ])
+
+
+### clienti care au lasat comentariu de tip "complaint"/"late"
+db.customer.aggregate([ { $match: {  c_comment: { $regex: /(complaint|late)/i } } }, {  $project: {  c_name: 1, c_comment: 1 } } ])
+
+
+### distributia pieselor in functie de marime in interval de 10 unitati
+db.partsupp_part.aggregate([ { $bucket: { groupBy: "$p_size", boundaries: [0, 10, 20, 30, 40, 50, 100], default: "Over 100", output: { count: { $sum: 1 }, avg_price: { $avg: "$p_retailprice" } } } } ])
+
+

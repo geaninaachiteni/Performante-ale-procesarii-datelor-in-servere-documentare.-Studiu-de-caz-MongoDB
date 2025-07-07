@@ -1,0 +1,13 @@
+Operator,Nr_interogari
+$match,68
+$group,52
+$lookup,16
+$project,39
+$unwind,21
+$facet,13
+$merge,1
+$out,0
+$sort,52
+$limit,32
+$bucket,16
+TOTAL,310
